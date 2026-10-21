@@ -14,8 +14,8 @@
          ======================== -->
     <node
         pkg="my_robot_control"
-        exec="my_robot_wallfollower_exec"
-        name="wall_follower_node"
+        exec="my_robot_wallfollower_differential_exec"
+        name="differential_wall_follower"
         output="screen">
 
         <!-- Pass arguments as parameters -->

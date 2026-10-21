@@ -6,7 +6,6 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     parameters = {
-        'use_sim_time': LaunchConfiguration('use_sim_time'),
         'follow_distance': LaunchConfiguration('follow_distance'),
         'max_front_length': LaunchConfiguration('max_front_length'),
         'forward_speed': LaunchConfiguration('forward_speed'),
@@ -21,7 +20,6 @@ def generate_launch_description():
     }
 
     return LaunchDescription([
-        DeclareLaunchArgument('use_sim_time', default_value='true'),
         DeclareLaunchArgument('follow_distance', default_value='0.35'),
         DeclareLaunchArgument('max_front_length', default_value='0.50'),
         DeclareLaunchArgument('forward_speed', default_value='0.30'),

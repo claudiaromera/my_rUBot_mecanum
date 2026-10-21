@@ -7,9 +7,9 @@ from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 
 
-class WallFollower(Node):
+class DifferentialWallFollower(Node):
     def __init__(self):
-        super().__init__('wall_follower_node')
+        super().__init__('differential_wall_follower')
 
         # Parameters
         self.declare_parameter('follow_distance', 0.35)  # desired distance to right wall
@@ -46,7 +46,7 @@ class WallFollower(Node):
         self._shutting_down = False
 
         self.get_logger().info(
-            "WallFollower (RIGHT tol, BACK_RIGHT when closest) - differential drive."
+            "Differential wall follower: RIGHT tolerance and BACK_RIGHT search."
         )
 
     #--------------------------------------------------------------------
@@ -231,7 +231,7 @@ def main(args=None):
         args=args,
         signal_handler_options=SignalHandlerOptions.NO,
     )
-    node = WallFollower()
+    node = DifferentialWallFollower()
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
