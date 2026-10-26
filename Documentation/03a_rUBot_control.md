@@ -350,7 +350,7 @@ The algorithm is based on LiDAR range tests and specific actions for each region
 We have to launch the `my_robot_wallfollower_differential.launch.xml` file in the `my_robot_control` package.
 
 ```shell
-ros2 launch my_robot_bringup my_robot_bringup_gz.launch.py world:=square4m_wall_ign.world robot_model:=rubot/rubot_mecanum.urdf.xacro x:=1.5 y:=-1.5 yaw:=0.5
+ros2 launch my_robot_bringup my_robot_bringup_gz.launch.py world:=square4m_wall_ign.world robot_model:=rubot/rubot_mecanum.urdf.xacro x:=1.5 y:=-1.5 yaw:=1.57
 ```
 
 To test the **Differential** version, keep the same simulation running and execute:
@@ -362,7 +362,7 @@ ros2 launch my_robot_control my_robot_wallfollower_differential.launch.xml
 Stop the controller with `Ctrl+C` and restore the initial simulated pose before testing another controller:
 
 ```shell
-ros2 run my_robot_control my_robot_set_pose_gazebo_exec --ros-args -p world_name:=square4m_wall_ign -p robot_name:=rubot_mecanum -p x:=1.5 -p y:=-1.5 -p yaw:=0.5
+ros2 run my_robot_control my_robot_set_pose_gazebo_exec --ros-args -p world_name:=square4m_wall_ign -p robot_name:=rubot_mecanum -p x:=1.5 -p y:=-1.5 -p yaw:=1.57
 ```
 
 ![](./Images/03_Control/wallfollower1.png)
@@ -376,76 +376,21 @@ ros2 launch my_robot_control my_robot_wallfollower_holonomic.launch.py
 Stop the controller with `Ctrl+C` and restore the initial simulated pose before the next test:
 
 ```shell
-ros2 run my_robot_control my_robot_set_pose_gazebo_exec --ros-args -p world_name:=square4m_wall_ign -p robot_name:=rubot_mecanum -p x:=1.5 -p y:=-1.5 -p yaw:=0.5
+ros2 run my_robot_control my_robot_set_pose_gazebo_exec --ros-args -p world_name:=square4m_wall_ign -p robot_name:=rubot_mecanum -p x:=1.5 -p y:=-1.5 -p yaw:=1.57
 ```
 **Activity: rUBot wall-follower**
 
-The objectives of this activity are:
+Complete **A4_ROS2_WallFollower**, available in the course documentation. In
+this activity, students improve the holonomic wall follower so that the robot
+can bypass a frontal obstacle and recover right-wall following.
 
-- Compare the differential and holonomic controllers.
-- Implement the **holonomic_obstacle** wall follower according to the described requirements.
-- Test the **holonomic obstacle** wall follower version
+The simulation must start with the robot approximately parallel to a wall on
+its right, with that wall inside the `RIGHT` LiDAR region. The controller does
+not implement an initial wall-acquisition manoeuvre.
 
-To test your designed activity node, keep the same simulation running and execute:
-
-```shell
-ros2 launch my_robot_control my_robot_wallfollower_holonomic_obstacle.launch.py \
-  follow_distance:=0.35 \
-  max_front_length:=0.50 \
-  forward_speed:=0.25 \
-  lateral_speed:=0.30 \
-  turn_speed:=0.60 \
-  detection_limit:=1.20 \
-  lateral_gain:=0.5 \
-  alignment_gain:=2.0
-```
-
-> All the parameters and their default values are shown explicitly so that
-> you can modify them during the test.
-
-During the test, check the state messages printed in the terminal. For a short
-obstacle, the expected regions are `RIGHT`, `FRONT`, `FRONT_RIGHT`, `RIGHT`,
-`BACK_RIGHT` and `RIGHT`. In the `RIGHT` state, verify that the robot corrects
-both its lateral distance and its angle to remain parallel to the wall. The
-status message shows the measured `distance`, the angle of the closest right
-rays, `vy` and `w`. When the robot is parallel, the measured angle should be
-close to `-90 deg` and `w` should approach zero.
-
-Stop the controller with `Ctrl+C` and restore the initial simulated pose before the next test:
-
-```shell
-ros2 run my_robot_control my_robot_set_pose_gazebo_exec --ros-args -p world_name:=square4m_wall_ign -p robot_name:=rubot_mecanum -p x:=1.5 -p y:=-1.5 -p yaw:=0.5
-```
-
-The parameters have the following meaning:
-
-- `follow_distance`: desired distance from the wall, in metres.
-- `max_front_length`: maximum lateral travel for classifying the frontal
-  object as a short obstacle, in metres.
-- `forward_speed`: forward velocity `vx`, in metres per second.
-- `lateral_speed`: lateral velocity `vy`, in metres per second.
-- `turn_speed`: angular velocity used to turn around a long frontal wall,
-  in radians per second.
-- `detection_limit`: maximum LiDAR distance considered when selecting the
-  closest region, in metres.
-- `lateral_gain`: proportional gain used to correct the distance to the
-  right wall while the controller is in the `RIGHT` state.
-- `alignment_gain`: proportional gain used to keep the robot parallel to
-  the wall. The controller averages the angles of the three closest valid
-  `RIGHT` rays and moves the resulting angle towards `-90 deg`. Its default
-  value is `2.0`, so an angular error of `10 deg` produces approximately
-  `0.35 rad/s`, limited by `turn_speed`.
-
-This node subscribes to `/scan` and `/odom` and publishes velocity commands
-to `/cmd_vel`. Its normal short-obstacle sequence is `RIGHT`, `FRONT`,
-`FRONT_RIGHT`, `RIGHT`, `BACK_RIGHT` and finally `RIGHT` again. If the
-lateral travel in `FRONT` reaches `max_front_length`, the object is treated
-as a long wall and the robot keeps turning through `FRONT_RIGHT` until the
-minimum LiDAR distance reaches `RIGHT`.
-
-- You can test the behaviour by tuning the defined parameters
-   ![](./Images/03_Control/wallfollower2.png)
-
+The complete requirements, state-machine description, default parameters,
+test procedure and delivery instructions are provided in the activity
+document.
 
 **REAL robot**
 

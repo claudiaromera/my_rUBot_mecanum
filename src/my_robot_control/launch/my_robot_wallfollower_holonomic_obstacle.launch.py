@@ -19,11 +19,11 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('follow_distance', default_value='0.35'),
         DeclareLaunchArgument('max_front_length', default_value='0.50'),
-        DeclareLaunchArgument('forward_speed', default_value='0.25'),
-        DeclareLaunchArgument('lateral_speed', default_value='0.30'),
-        DeclareLaunchArgument('turn_speed', default_value='0.60'),
+        DeclareLaunchArgument('forward_speed', default_value='0.20'),
+        DeclareLaunchArgument('lateral_speed', default_value='0.20'),
+        DeclareLaunchArgument('turn_speed', default_value='1.00'),
         DeclareLaunchArgument('detection_limit', default_value='1.20'),
-        DeclareLaunchArgument('lateral_gain', default_value='0.5'),
+        DeclareLaunchArgument('lateral_gain', default_value='1.5'),
         DeclareLaunchArgument('alignment_gain', default_value='2.0'),
         Node(
             package='my_robot_control',
